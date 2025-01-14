@@ -7,6 +7,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'super_admin') {
 }
 
 require 'includes/db.php';
+require 'includes/jdf.php'; // فراخوانی کتابخانه تبدیل تاریخ
 
 // دریافت لیست همه کاربران
 $stmt = $pdo->query('SELECT * FROM users');
@@ -30,17 +31,22 @@ require 'includes/sidebar.php';
                             <th>نام کاربری</th>
                             <th>ایمیل</th>
                             <th>نقش</th>
-                            <th>تاریخ ثبت‌نام</th>
+                            <th>تاریخ ثبت‌نام (شمسی)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($users_list as $user): ?>
+                            <?php
+                            // تبدیل تاریخ میلادی به شمسی
+                            $gregorian_date = strtotime($user['created_at']);
+                            $jalali_date = jdate('Y/m/d H:i:s', $gregorian_date);
+                            ?>
                             <tr>
                                 <td><?= htmlspecialchars($user['id']) ?></td>
                                 <td><?= htmlspecialchars($user['username']) ?></td>
                                 <td><?= htmlspecialchars($user['email']) ?></td>
                                 <td><?= htmlspecialchars($user['role']) ?></td>
-                                <td><?= htmlspecialchars($user['created_at']) ?></td>
+                                <td><?= htmlspecialchars($jalali_date) ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
