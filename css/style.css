@@ -1,0 +1,29 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.sidebar {
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 250px;
+    background-color: #343a40;
+    padding-top: 20px;
+}
+
+.sidebar a {
+    color: #fff;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+}
+
+.sidebar a:hover {
+    background-color: #495057;
+}
+
+.main-content {
+    margin-right: 250px;
+    padding: 20px;
+}
