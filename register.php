@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
     $email = $_POST['email'];
+    $phone = $_POST['phone'];
     $role = $_POST['role'];
 
     // بررسی تکراری نبودن نام کاربری
@@ -25,10 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'ایمیل قبلاً استفاده شده است!';
     }
 
+    // بررسی تکراری نبودن شماره موبایل
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE phone = ?');
+    $stmt->execute([$phone]);
+    if ($stmt->fetch()) {
+        $error = 'شماره موبایل قبلاً استفاده شده است!';
+    }
+
     // اگر خطایی وجود نداشت، کاربر رو ثبت‌نام کن
     if (empty($error)) {
-        $stmt = $pdo->prepare('INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, ?)');
-        $stmt->execute([$username, $password, $email, $role]);
+        $stmt = $pdo->prepare('INSERT INTO users (username, password, email, phone, role) VALUES (?, ?, ?, ?, ?)');
+        $stmt->execute([$username, $password, $email, $phone, $role]);
 
         $success = 'ثبت‌نام شما با موفقیت انجام شد!';
     }
@@ -82,6 +90,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="mb-3">
                                 <label for="email" class="form-label">ایمیل</label>
                                 <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">شماره موبایل</label>
+                                <input type="text" class="form-control" id="phone" name="phone" required>
                             </div>
                             <div class="mb-3">
                                 <label for="role" class="form-label">نقش</label>
